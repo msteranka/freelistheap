@@ -2,9 +2,9 @@
 #define __HEAP_H
 
 #include <unistd.h>
-#include "freelist.h"
-#include "header.h"
-#include "error.h"
+#include "freelist.hh"
+#include "header.hh"
+#include "error.hh"
 
 const unsigned char mod37BitPosition[] = {
 	32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4,

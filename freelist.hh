@@ -2,7 +2,7 @@
 #define __FREE_LIST_H
 
 #include <pthread.h>
-#include "header.h"
+#include "header.hh"
 
 class FreeList {
 	public:
@@ -81,7 +81,7 @@ inline unsigned int FreeList::getNumPages() {
 	pthread_mutex_lock(&numPagesLock);
 	unsigned int val = numPages;
 	pthread_mutex_unlock(&numPagesLock);
-	return numPages;
+	return val;
 }
 
 inline void FreeList::setNumPages(unsigned int numPages) {
