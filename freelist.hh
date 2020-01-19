@@ -21,11 +21,14 @@ class FreeList {
 		} node_t;
 
 		node_t *head;
-		unsigned int sizeClass, numPages;
-		unsigned char index;
-		pthread_mutex_t headLock, numPagesLock;
+		unsigned int sizeClass, // Corresponding size class
+		numPages; // Number of pages allocated to free list
+		unsigned char index; // Index into heap's array of free lists
+		pthread_mutex_t headLock, // Lock for free list head
+		numPagesLock; // Lock for numPages field
 };
 
+// For suppressing warnings
 inline FreeList::FreeList() {}
 
 inline FreeList::FreeList(void *addr, size_t length, unsigned int sizeClass, unsigned int numPages, unsigned char index) {
@@ -37,10 +40,13 @@ inline FreeList::FreeList(void *addr, size_t length, unsigned int sizeClass, uns
 	expand(addr, length);
 }
 
+/*
+ * Adds items to free list given a pointer to allocated memory and the size of that memory
+*/
 inline void FreeList::expand(void *ptr, const size_t LEN) {
 	node_t *cur;
-	const size_t TOTAL_SIZE = sizeClass + sizeof(node_t);
-	const size_t AVAILABLE = LEN - TOTAL_SIZE;
+	const size_t TOTAL_SIZE = sizeClass + sizeof(node_t); // Total size of each node, combined size of data and metadata
+	const size_t AVAILABLE = LEN - TOTAL_SIZE; // Available space to use
 
 	for (int i = 0; i < AVAILABLE; i += TOTAL_SIZE) {
 		cur = (node_t *) ((char *) ptr + i);
@@ -53,7 +59,7 @@ inline void FreeList::expand(void *ptr, const size_t LEN) {
 
 inline void *FreeList::malloc() {
 	pthread_mutex_lock(&headLock);
-	if (head == NULL) {
+	if (head == NULL) { // If list is empty
 		pthread_mutex_unlock(&headLock);
 		return NULL;
 	}
