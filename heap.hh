@@ -2,9 +2,9 @@
 #define __HEAP_H
 
 #include <unistd.h>
-#include "freelist.h"
-#include "header.h"
-#include "error.h"
+#include "freelist.hh"
+#include "header.hh"
+#include "error.hh"
 
 /*
  * Used for counting number of trailing zero bits
